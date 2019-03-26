@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "RBT.h"
-//Declare a standard NIL node that all NULLS will point to
 
 //Code adapted from https://www.geeksforgeeks.org/c-program-red-black-tree-insertion/
 //Used as template and ajusted to work within design choices
@@ -18,10 +17,10 @@ RBT *newRBT(){
     newRBT->root = NULL;
 }
 
-node *RBTInsert(char *title, RBT *tree){
-    node *newNode = Node(title, NULL, NULL, NULL);
+void *RBTInsert(char *title, char *genre, char *runningTime, int year, RBT *tree){
+    node *newNode = Node(title, genre, runningTime, year, none, NULL, NULL, NULL);
 
-    tree->root = RBTInsert(tree->root, newNode);
+    tree->root = InsertHelper(tree->root, newNode);
 
     Fixup(tree->root, newNode);
 }
@@ -30,11 +29,11 @@ node *InsertHelper(node *root, node *p){
     if(root == NULL)
         return p;
 
-    if(p->key < root->key){
+    if(strcmp(root->key, p->key) <= 0){
         root->left = InsertHelper(root->left, p);
         root->left->parent = root;
     }
-    else if(p->key > root->key){
+    else if(strcmp(root->key, p->key) > 0){
         root->right = InsertHelper(root->right, p);
         root->right->parent = root;
     }
@@ -147,3 +146,29 @@ void Fixup(node *root, node *p){
     root->color = BLACK;    
 }
 
+node *search(char *title, RBT *tree){
+    node *current = tree->root;
+
+    while(current != NULL){
+        if(strcmp(title, current->key) == 0 && current->found == false){
+            break;
+        }
+        else if(strcmp(title, current->key) < 0){
+            if(current->left == NULL)
+                break;
+            else
+                current = current->left;
+        }
+        else
+            if(current->right == NULL)
+                break;
+            else
+                current = current->right;
+        }
+
+    current->found = true;
+    return current;
+
+    //Current will ensure all options are found and listed when searched for
+    //After choice is selected built list of nodes will have found reset
+}
