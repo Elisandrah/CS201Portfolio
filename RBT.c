@@ -148,7 +148,7 @@ void Fixup(node *root, node *p){
 
 node *search(char *title, RBT *tree){
     node *current = tree->root;
-
+    //Replace strcmp with strncmp and other instances
     while(current != NULL){
         if(strcmp(title, current->key) == 0 && current->found == false){
             break;

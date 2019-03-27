@@ -10,6 +10,8 @@ typedef struct node{
 
     bool color;
     char *key[256];
+    //Chosen as longest movie title was about 200 characters long
+    //256 allows more leeway but still large enough
     char *genre[256];
     char runningTime[50];
     int year;
@@ -37,4 +39,28 @@ node *Node(char *title, char *genre, char *runningTime, int year, bool type, nod
     newNode->dateAcquired = time(NULL);
     newNode->found = false;
     
+}
+
+char GetTitle(node *movie){
+    return movie->key;
+}
+
+char GetGenre(node *movie){
+    return movie->genre;
+}
+
+char GetRunningTime(node *movie){
+    return movie->runningTime;
+}
+
+int GetYear(node *movie){
+    return movie->year;
+}
+
+bool GetMediaType(node *movie){
+    return movie->MediaType;
+}
+
+time_t GetDateAcquired(node *movie){
+    return movie->dateAcquired;
 }
