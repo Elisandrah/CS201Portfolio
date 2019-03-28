@@ -5,7 +5,7 @@
 typedef struct rbt RBT;
 
 extern RBT *newRBT();
-node *RBTInsert(char *title, char *genre, char *runningTime, int year, RBT *tree);
+node *RBTInsert(char *title, char *genre, int runningTime, int year, RBT *tree);
 void Fixup(node *root, node *p);
 void RotateLeft(node *root, node *p);
 void RotateRight(node *root, node *p);

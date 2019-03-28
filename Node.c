@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 enum Color {RED, BLACK};
 enum MediaType {dvd, bluray, digital, none};
@@ -13,7 +14,7 @@ typedef struct node{
     //Chosen as longest movie title was about 200 characters long
     //256 allows more leeway but still large enough
     char *genre[256];
-    char runningTime[50];
+    int runningTime;
     int year;
     bool MediaType;
     time_t dateAcquired;
@@ -25,12 +26,12 @@ typedef struct node{
 
 }node;
 
-node *Node(char *title, char *genre, char *runningTime, int year, bool type, node *left, node *right, node *parent){
+node *Node(char *title, char *genre, int runningTime, int year, bool type, node *left, node *right, node *parent){
     node *newNode = (node *)malloc(sizeof(node));
 
     strcpy(newNode->key, title);
     strcpy(newNode->genre, genre);
-    strcpy(newNode->runningTime, runningTime);
+    newNode->runningTime = runningTime;
     newNode->year = year;
     newNode->left = left;
     newNode->right = right;
@@ -49,7 +50,7 @@ char GetGenre(node *movie){
     return movie->genre;
 }
 
-char GetRunningTime(node *movie){
+int GetRunningTime(node *movie){
     return movie->runningTime;
 }
 
@@ -64,3 +65,24 @@ bool GetMediaType(node *movie){
 time_t GetDateAcquired(node *movie){
     return movie->dateAcquired;
 }
+
+void SetGenre(node *movie, char *genre){
+    strncpy(movie->genre, genre, 256);
+}
+
+void SetRunningTime(node *movie, int time){
+    movie->runningTime = time;
+}
+
+void SetYear(node *movie, int year){
+    movie->year = year;
+}
+
+void SetMediaType(node *movie, bool type){
+    movie->MediaType = type;
+}
+
+void SetDateAcquired(node *movie, time_t date){
+    movie->dateAcquired = date;
+}
+

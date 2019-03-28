@@ -17,7 +17,7 @@ RBT *newRBT(){
     newRBT->root = NULL;
 }
 
-void *RBTInsert(char *title, char *genre, char *runningTime, int year, RBT *tree){
+void *RBTInsert(char *title, char *genre, int runningTime, int year, RBT *tree){
     node *newNode = Node(title, genre, runningTime, year, none, NULL, NULL, NULL);
 
     tree->root = InsertHelper(tree->root, newNode);
