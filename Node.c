@@ -7,6 +7,8 @@
 enum Color {RED, BLACK};
 enum MediaType {dvd, bluray, digital, none};
 
+typedef struct node node;
+
 typedef struct node{
 
     bool color;

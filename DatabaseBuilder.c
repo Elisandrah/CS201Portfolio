@@ -9,7 +9,6 @@ RBT *CreateDatabase(){
     RBT *database = newRBT();
     FILE *fp = fopen("movie_records", "r");
     
-
     if(fp == NULL){
         printf("File \"movie_records\" not found\n");
         return NULL;
@@ -67,6 +66,17 @@ void CreateLogFile(char *name){
         }
 
         fclose(fp);
+}
+
+void Alphabetize(char *name){
+        FILE *fp = fopen(name, "w");
+
+        if(fp == NULL){
+            return;
+        }
+
+        //Write this if time permits
+
 }
 
 void AddToLogFile(char *name, node *movie){
@@ -172,34 +182,49 @@ void UpdateMovie(char *name, node *movie){
 
          case 'm':
                 printf("Enter which Media Type:\n");
-                printf("DVD: Enter \"d\"\n");
+                printf("DVD: Enter \"v\"\n");
                 printf("Bluray: Enter \"b\"\n");
                 printf("Digital: Enter \"d\"\n");
 
                 char temp = getchar();
 
-                if(temp < 64 || temp > 121 || (temp > 90 && temp < 97)){
-                    printf("Invalid character entered, try again\n");
-    }
-    else if (choice < 97){
-        choice = choice + 32;
-    }
-
-
+            if(temp < 64 || temp > 121 || (temp > 90 && temp < 97)){
+                printf("Invalid character entered, try again\n");
+             }
+            else if (choice < 97){
+                choice = choice + 32;
+            }
+            else{
+                if(choice == 'v'){
+                    SetMediaType(movie, dvd);
+                    completed = true;
+                }
+                else if(choice == 'b'){
+                    SetMediaType(movie, bluray);
+                    completed = true;   
+                }
+                 else if(choice == 'd'){
+                    SetMediaType(movie, digital);
+                    completed = true;   
+                }
+                else
+                {
+                    printf("Incorrect choice, please try again\n");
+                    break;
+                }
+            }
+            break;
 
          case 'd':
+            printf("Will write this when I figure it out");
 
          default:
-             printf("Invalid character entered, try again\n");
-             flcose(fp);
-              UpdateMovie(name, movie);
-               return;
+            printf("Invalid character entered, try again\n");
+            flcose(fp);
+            UpdateMovie(name, movie);
+            return;
         }
     }
-
-
-
-
 }
 
 int RemoveFromLogFile(char *name, char *movieTitle){
@@ -224,7 +249,7 @@ int RemoveFromLogFile(char *name, char *movieTitle){
                 //do nothing with that string, deletes it
             }
             else
-                fputs(buffer, fp);
+                fputs(buffer, new);
 
         }
 
