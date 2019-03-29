@@ -1,4 +1,7 @@
+#ifndef RBT
 #include "RBT.h"
+#endif
+#include "Node.c"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,29 +33,31 @@ RBT *CreateDatabase(){
                 switch (i)
                 {
                     case 2:
-                        strncpy(title, strtok(buffer, '\t'), 256);
+                        strncpy(title, strtok(buffer, "\t"), 256);
                         break;
 
                     case 5:
-                        year = atoi(strtok(buffer, '\t'));
+                        year = atoi(strtok(buffer, "\t"));
                         break;
 
                     case 7:
-                        runningTime = atoi(strtok(buffer, '\t'));
+                        runningTime = atoi(strtok(buffer, "\t"));
                         break;
 
                     case 8:
-                        strncpy(genre, strtok(buffer, '\t'),256);
+                        strncpy(genre, strtok(buffer, "\t"),256);
                         break;
                 
                     default:
-                        strtok(buffer, '\t');
+                        strtok(buffer, "\t");
                         break;
                 }
             }
             RBTInsert(title, genre, runningTime, year, database);
 
     }
+
+    return database;
 }
 
 void CreateLogFile(char *name){
@@ -82,6 +87,7 @@ void Alphabetize(char *name){
 void AddToLogFile(char *name, node *movie){
         
         FILE *fp = fopen(name, "a");
+        MediaType type;
 
         if(fp == NULL){
             printf("%s could not be opened\n", name);
@@ -91,19 +97,41 @@ void AddToLogFile(char *name, node *movie){
         fputs(GetTitle(movie), fp);
         fputs("\t", fp);
 
-        fputs(GetYear(movie), fp);
+        fprintf(fp, "%d", GetYear(movie));
         fputs("\t", fp);
 
-        fputs(GetRunningTime(movie), fp);
+        fprintf(fp, "%d", GetRunningTime(movie));
         fputs("\t", fp);
 
         fputs(GetGenre(movie), fp);
         fputs("\t", fp);
 
-        fputs(GetMediaType(movie), fp);
-        fputs("\t", fp);
+        type = GetMediaType(movie);
+        switch (type)
+        {
+            case dvd:
+                fputs("DVD", fp);
+                fputs("\t", fp);
+                break;
 
-        fputs(GetDateAcquired(movie), fp);
+            case bluray:
+                fputs("Bluray", fp);
+                fputs("\t", fp);
+                break;
+
+            case digital:
+                fputs("Digital", fp);
+                fputs("\t", fp);
+                break;
+
+            default:
+                fputs("Not Specified", fp);
+                fputs("\t", fp);
+                break;
+        }
+        time_t time;
+        time = ((GetDateAcquired(movie)));
+        fputs(ctime(&time), fp);
         fputs("\n", fp);
 
         fclose(fp);
@@ -133,19 +161,20 @@ void UpdateMovie(char *name, node *movie){
     
     if(choice < 64 || choice > 121 || (choice > 90 && choice < 97)){
         printf("Invalid character entered, try again\n");
-        flcose(fp);
+        fclose(fp);
         UpdateMovie(name, movie);
         return;
     }
     else if (choice < 97){
         choice = choice + 32;
     }
+    int temp;
     while(completed == false){
      switch(choice){
          case 'y':
              printf("Enter the desired year, ex(1956): ");
              fgets(buffer, sizeof buffer, stdin);
-             int temp = atoi(buffer);
+             temp = atoi(buffer);
 
              if(temp == 0 || temp < 0){ 
                 printf("Invalid year entered, try again\n");
@@ -161,7 +190,7 @@ void UpdateMovie(char *name, node *movie){
          case 'r':
             printf("Enter the desired Running Time in minutes, ex(74)");
             fgets(buffer, sizeof buffer, stdin);
-            int temp = atoi(buffer);
+            temp = atoi(buffer);
 
             if(temp == 0 || temp < 0){ 
                 printf("Invalid year entered, try again\n");
@@ -186,24 +215,24 @@ void UpdateMovie(char *name, node *movie){
                 printf("Bluray: Enter \"b\"\n");
                 printf("Digital: Enter \"d\"\n");
 
-                char temp = getchar();
+                char tempc = getchar();
 
-            if(temp < 64 || temp > 121 || (temp > 90 && temp < 97)){
+            if(tempc < 64 || tempc > 121 || (tempc > 90 && tempc < 97)){
                 printf("Invalid character entered, try again\n");
              }
-            else if (choice < 97){
-                choice = choice + 32;
+            else if (tempc < 97){
+                tempc = tempc + 32;
             }
             else{
-                if(choice == 'v'){
+                if(tempc == 'v'){
                     SetMediaType(movie, dvd);
                     completed = true;
                 }
-                else if(choice == 'b'){
+                else if(tempc == 'b'){
                     SetMediaType(movie, bluray);
                     completed = true;   
                 }
-                 else if(choice == 'd'){
+                 else if(tempc == 'd'){
                     SetMediaType(movie, digital);
                     completed = true;   
                 }
@@ -220,7 +249,7 @@ void UpdateMovie(char *name, node *movie){
 
          default:
             printf("Invalid character entered, try again\n");
-            flcose(fp);
+            fclose(fp);
             UpdateMovie(name, movie);
             return;
         }
@@ -238,7 +267,7 @@ int RemoveFromLogFile(char *name, char *movieTitle){
 
         if(fp == NULL){
             printf("%s could not be oepened\n", name);
-            return;
+            return 2;
         }
 
         while(!feof(fp)){
@@ -265,7 +294,7 @@ int RemoveFromLogFile(char *name, char *movieTitle){
         }
         else
         {
-            fclose("new");
+            fclose(new);
             remove("new");
             //Add this print statement to the runner program
             printf("%s could not be found within the logfile, please try again\n", movieTitle);

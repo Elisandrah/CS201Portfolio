@@ -6,23 +6,13 @@
 //Code adapted from https://www.geeksforgeeks.org/c-program-red-black-tree-insertion/
 //Used as template and ajusted to work within design choices
 
-typedef struct RBT{
-    node *root;
-
-}RBT;
 
 RBT *newRBT(){
     RBT *newRBT = (RBT *)malloc(sizeof(RBT));
 
     newRBT->root = NULL;
-}
 
-void *RBTInsert(char *title, char *genre, int runningTime, int year, RBT *tree){
-    node *newNode = Node(title, genre, runningTime, year, none, NULL, NULL, NULL);
-
-    tree->root = InsertHelper(tree->root, newNode);
-
-    Fixup(tree->root, newNode);
+    return newRBT;
 }
 
 node *InsertHelper(node *root, node *p){
@@ -39,6 +29,14 @@ node *InsertHelper(node *root, node *p){
     }
 
     return root;
+}
+
+void RBTInsert(char *title, char *genre, int runningTime, int year, RBT *tree){
+    node *newNode = Node(title, genre, runningTime, year, NULL, NULL, NULL);
+
+    tree->root = InsertHelper(tree->root, newNode);
+
+    Fixup(tree->root, newNode);
 }
 
 void RotateRight(node *root, node *p){

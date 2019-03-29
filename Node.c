@@ -1,3 +1,5 @@
+#ifndef Node_c
+#define Node_c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,17 +7,17 @@
 #include <stdbool.h>
 
 enum Color {RED, BLACK};
-enum MediaType {dvd, bluray, digital, none};
+typedef enum MediaType {dvd, bluray, digital, none} MediaType;
 
 typedef struct node node;
 
 typedef struct node{
 
     bool color;
-    char *key[256];
+    char key[256];
     //Chosen as longest movie title was about 200 characters long
     //256 allows more leeway but still large enough
-    char *genre[256];
+    char genre[256];
     int runningTime;
     int year;
     bool MediaType;
@@ -28,10 +30,10 @@ typedef struct node{
 
 }node;
 
-node *Node(char *title, char *genre, int runningTime, int year, bool type, node *left, node *right, node *parent){
+node *Node(char *title, char *genre, int runningTime, int year, node *left, node *right, node *parent){
     node *newNode = (node *)malloc(sizeof(node));
 
-    strcpy(newNode->key, title);
+    strncpy(newNode->key, title, 256);
     strcpy(newNode->genre, genre);
     newNode->runningTime = runningTime;
     newNode->year = year;
@@ -39,16 +41,19 @@ node *Node(char *title, char *genre, int runningTime, int year, bool type, node 
     newNode->right = right;
     newNode->parent = parent;
     newNode->color = RED;
+    newNode->MediaType = none;
     newNode->dateAcquired = time(NULL);
     newNode->found = false;
+
+    return newNode;
     
 }
 
-char GetTitle(node *movie){
+char *GetTitle(node *movie){
     return movie->key;
 }
 
-char GetGenre(node *movie){
+char *GetGenre(node *movie){
     return movie->genre;
 }
 
@@ -88,3 +93,4 @@ void SetDateAcquired(node *movie, time_t date){
     movie->dateAcquired = date;
 }
 
+#endif
