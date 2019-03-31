@@ -1,12 +1,12 @@
 #ifndef RBT
 #include "RBT.h"
 #endif
-#include "Node.c"
+#ifndef Node
+#include "node.c"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
-
-//Will write at a later time. This will be the file that loads
-//in all of the movies and puts them in the RBT
+#include <time.h>
 
 RBT *CreateDatabase(){
     RBT *database = newRBT();
@@ -60,15 +60,17 @@ RBT *CreateDatabase(){
     return database;
 }
 
-void CreateLogFile(char *name){
+int CreateLogFile(char *name){
         strcat(name, ".log");
 
         FILE *fp = fopen(name, "w");
 
         if(fp == NULL){
             printf("File could not be opened\n");
-            return;
+            return 1;
         }
+
+        return 0;
 
         fclose(fp);
 }
@@ -245,7 +247,8 @@ void UpdateMovie(char *name, node *movie){
             break;
 
          case 'd':
-            printf("Will write this when I figure it out");
+           //D:
+            break; 
 
          default:
             printf("Invalid character entered, try again\n");
@@ -306,7 +309,7 @@ void RemoveLogFile(char *name){
         FILE *fp = fopen(name, "w");
 
         if(fp == NULL){
-            printf("%s could no be opened\n", name);
+            printf("%s could not be opened\n", name);
             return;
         }
 
@@ -315,4 +318,23 @@ void RemoveLogFile(char *name){
 
         printf("%s has been removed", name);
         return;
+}
+
+void DisplayLogFile(char *name){
+    FILE *fp = fopen(name, "r");
+    char buffer[2400];
+
+    if(fp == NULL){
+        printf("%s could not be opened\n", name);
+        return;
+    }
+
+    printf("'\t''\t''\t'%s\n\n", name);
+
+    while(!feof(fp)){
+        fgets(buffer, 2400, fp);
+        printf("%s", buffer);
+        printf("\n");
+    }
+    return;
 }

@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#ifndef RBT
 #include "RBT.h"
+#endif
 
 //Code adapted from https://www.geeksforgeeks.org/c-program-red-black-tree-insertion/
 //Used as template and ajusted to work within design choices
-
 
 RBT *newRBT(){
     RBT *newRBT = (RBT *)malloc(sizeof(RBT));
